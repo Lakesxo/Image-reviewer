@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { fetchPhoto } from "../api/apiEndpoints";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addApprovedImage, addRejectedImageId, selectRejectedImageIds, selectApprovedImages } from "../features/ImageReducer"
 
@@ -106,9 +106,16 @@ export const ImagePreview = () => {
     };
 
     const approveImage = () => {
+        const localImages = JSON.parse(localStorage.getItem("acceptedImages"))
         dispatch(addApprovedImage(newImage));
         getAndSetImage()
-        localStorage.setItem("acceptedImages", JSON.stringify(...acceptedImages, newImage))
+        if (localImages === null){
+            localStorage.setItem("acceptedImages", JSON.stringify([...acceptedImages, newImage]))
+        }else if (acceptedImages.length >= 0 && localImages.length > 0){
+            localStorage.setItem("acceptedImages", JSON.stringify([...localImages, newImage]))
+        } else {
+            localStorage.setItem("acceptedImages", JSON.stringify([...acceptedImages, newImage]))
+        }
     };
 
 

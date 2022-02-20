@@ -9,6 +9,7 @@ import { selectApprovedImages } from "./features/ImageReducer"
 
 const App = () => {
   const approvedImgArray = useSelector(selectApprovedImages)
+  const acceptedImages = JSON.parse(localStorage.getItem("acceptedImages"))
 
   return (
     <div>
@@ -18,7 +19,7 @@ const App = () => {
             <Paragraph text={"IMAGE APPROVAL APPLICATION"} />
           </ParagraphContainer>
           <ParagraphContainer>
-            <Paragraph text={`APPROVED IMAGES (${approvedImgArray.length})`} />
+            <Paragraph text={`APPROVED IMAGES (${acceptedImages === null ? approvedImgArray.length : acceptedImages.length})`} />
             <CarouselStyle>
               <Carousel />
             </CarouselStyle>

@@ -37,18 +37,34 @@ const PlusIconStyle = styled.div`
 
 export const Carousel = () => {
     const approvedImgArray = useSelector(selectApprovedImages)
-    // const approvedPersistedImages = JSON.parse(localStorage.getItem("approvedImages"))
+    const acceptedImages = JSON.parse(localStorage.getItem("acceptedImages"))
 
     return(
         <div>
             {
-                approvedImgArray.length <= 0 
+                approvedImgArray.length <= 0 && acceptedImages === null
                 ?
                 <PlusIconStyle>
                     <svg width="30" height="29" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 8H1M9 16V8V16ZM9 8V0V8ZM9 8H17H9Z" stroke="#BABDC1" strokeWidth="2" strokeLinecap="round"/>
                     </svg>
                 </PlusIconStyle>
+                :
+                approvedImgArray.length <= 0 && acceptedImages.length > 0
+                ?
+                <CarouselStyle>
+                    {
+                        acceptedImages.map(img => <ApprovedImagesStyle key={img.id} src={img.urls.small} />)
+                    }
+                </CarouselStyle>
+                :
+                approvedImgArray.length > 0 && acceptedImages.length > 0
+                ?
+                <CarouselStyle>
+                    {
+                        acceptedImages.map(img => <ApprovedImagesStyle key={img.id} src={img.urls.small} />)
+                    }
+                </CarouselStyle>
                 :
                 <CarouselStyle>
                     {
