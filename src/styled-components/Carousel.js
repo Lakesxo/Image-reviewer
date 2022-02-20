@@ -2,8 +2,6 @@ import styled from "styled-components"
 import { useSelector } from "react-redux";
 import { selectApprovedImages } from "../features/ImageReducer"
 
-
-
 export const CarouselStyle = styled.div`
     display: flex;
     overflow-x: scroll;
@@ -39,6 +37,7 @@ const PlusIconStyle = styled.div`
 
 export const Carousel = () => {
     const approvedImgArray = useSelector(selectApprovedImages)
+    // const approvedPersistedImages = JSON.parse(localStorage.getItem("approvedImages"))
 
     return(
         <div>

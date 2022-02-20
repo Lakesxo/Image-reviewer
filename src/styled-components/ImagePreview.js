@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { fetchPhoto } from "../api/apiEndpoints";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addApprovedImage, addRejectedImageId, selectRejectedImageIds } from "../features/ImageReducer"
+import { addApprovedImage, addRejectedImageId, selectRejectedImageIds, selectApprovedImages } from "../features/ImageReducer"
 
 
 export const ImagePreviewStyle = styled.div`
@@ -82,8 +82,9 @@ export const ImagePreview = () => {
     const [newImage, setNewImage] = useState(null)
     const dispatch = useDispatch()
     const rejectedImageIDs = useSelector(selectRejectedImageIds)
+    const acceptedImages = useSelector(selectApprovedImages)
     const [showActionBtns, setShowActionBtns] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const getAndSetImage = async () => {
         setIsLoading(true)
@@ -99,13 +100,17 @@ export const ImagePreview = () => {
             }
         } else {
             setIsLoading(false);
+            setNewImage(null)
+            alert("Ooops! Rate limit has been exceeded. Please try again in an hour")
         }
     };
 
     const approveImage = () => {
         dispatch(addApprovedImage(newImage));
         getAndSetImage()
+        localStorage.setItem("acceptedImages", JSON.stringify(...acceptedImages, newImage))
     };
+
 
     const rejectImage = () => {
         dispatch(addRejectedImageId(newImage.id));
@@ -130,7 +135,7 @@ export const ImagePreview = () => {
                     <Loader></Loader>
                     :
                     <>
-                        <Image src={newImage.urls.small} />
+                        <Image src={newImage?.urls?.small} />
                     </>
                 }
             </ImageContainer>
