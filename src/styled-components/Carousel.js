@@ -1,4 +1,7 @@
 import styled from "styled-components"
+import { useSelector } from "react-redux";
+import { selectApprovedImages } from "../features/ImageReducer"
+
 
 
 export const CarouselStyle = styled.div`
@@ -34,11 +37,13 @@ const PlusIconStyle = styled.div`
     border-radius: 3px
 `
 
-export const Carousel = ({ src }) => {
+export const Carousel = () => {
+    const approvedImgArray = useSelector(selectApprovedImages)
+
     return(
         <div>
             {
-                true 
+                approvedImgArray.length <= 0 
                 ?
                 <PlusIconStyle>
                     <svg width="30" height="29" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -46,9 +51,11 @@ export const Carousel = ({ src }) => {
                     </svg>
                 </PlusIconStyle>
                 :
-                <>
-                    <ApprovedImagesStyle src={src} />
-                </>
+                <CarouselStyle>
+                    {
+                        approvedImgArray.map(img => <ApprovedImagesStyle key={img.id} src={img.urls.small} />)
+                    }
+                </CarouselStyle>
             }
         </div>
     )
